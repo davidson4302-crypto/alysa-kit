@@ -1,0 +1,11 @@
+{
+  "tokenFile": "REPLACE_WITH_HOME/Desktop/811 memory alysa/alysa-bot/secrets/discord-bot-token.txt",
+  "allowedUserId": "PASTE_SHAWN_DISCORD_USER_ID",
+  "allowedChannelId": "PASTE_ALYSA_CHANNEL_ID",
+  "claudeExe": "claude",
+  "workingDir": "REPLACE_WITH_HOME/Desktop/811 memory alysa/alysa-bot/work",
+  "permissionMode": "bypassPermissions",
+  "timeoutSeconds": 900,
+  "logFile": "REPLACE_WITH_HOME/Library/Logs/alysa-bot/bridge.log",
+  "claudeTokenFile": ""
+}

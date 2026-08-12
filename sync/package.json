@@ -1,0 +1,14 @@
+{
+  "name": "alysa-memory-sync",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright uploader for Alysa's memory skill. Pushes ~/.claude/skills/alysa-memory/ to Shawn's claude.ai account on a 15-minute cadence.",
+  "main": "upload-skills.js",
+  "scripts": {
+    "check": "node upload-skills.js --check",
+    "login": "node upload-skills.js --login"
+  },
+  "dependencies": {
+    "playwright": "^1.47.0"
+  }
+}
