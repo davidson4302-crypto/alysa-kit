@@ -14,6 +14,9 @@ in step.
   teamviewer-runbook.md        (plain-language step-by-step, no jargon)
   onboarding-grill.md          (grill-me script to fill Shawn's memory)
   alysa-bot/                   (the always-on Discord daemon)
+  alysa-runtime/               (unified conversation memory across every
+                                surface — Discord, Cowork, and any CLI
+                                Alysa is invoked from by name)
   cowork-skills/               (the five skills that ship to claude.ai)
     alysa/                     (core persona, voice, rules)
     alysa-memory/              (his facts, index + notes)
@@ -22,6 +25,25 @@ in step.
     alysa-calendar/            (calendar hat)
   sync/                        (keeps disk memory and claude.ai in step)
 ```
+
+## Unified conversation memory (added 2026-08-12)
+
+Alysa has one continuous memory across every place she runs. Every message on
+Discord, every reply she sends, and every CLI session Shawn names her in gets
+written to a single append-only log. The Discord bot reads the last week of
+that log into every reply, so she picks up mid-thread even after a restart or
+a switch of channel.
+
+Name-mention trigger: any Claude Code session where Shawn types "Alysa" starts
+logging that session end-to-end. Grok CLI, Codex CLI, and any future model
+(qwen, whatever comes next) get transparently wrapped once installed — if the
+session ever mentions Alysa, the transcript gets logged; if not, the recording
+is thrown away.
+
+Install once on Shawn's machine: `bash alysa-runtime/install.sh`. That copies
+the runtime to `~/.alysa/`, wires the Claude Code hooks into `~/.claude/settings.json`,
+and registers `grok` and `codex` shell wraps in `~/.zshrc`. To add another
+model later: `~/.alysa/dw-register qwen`.
 
 ## The three surfaces
 

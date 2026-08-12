@@ -1,0 +1,43 @@
+#!/bin/bash
+# Register a CLI so plain `<cmd>` in a shell auto-wraps with `dw`.
+# Usage: ~/.alysa/dw-register grok
+#        ~/.alysa/dw-register qwen
+
+set -euo pipefail
+
+if [ $# -lt 1 ]; then
+  echo "usage: $0 <cmd>" >&2
+  exit 2
+fi
+
+CMD="$1"
+CMD_BIN="$(command -v -- "$CMD" 2>/dev/null || true)"
+if [ -z "$CMD_BIN" ]; then
+  echo "warning: '$CMD' not currently on PATH — registration will still be added and will take effect once installed." >&2
+fi
+
+MARK_BEGIN="# >>> alysa-wrap: $CMD"
+MARK_END="# <<< alysa-wrap: $CMD"
+
+BLOCK=$(cat <<EOF
+$MARK_BEGIN
+$CMD() {
+  if [ -t 0 ] && [ -t 1 ]; then
+    "\$HOME/.alysa/dw" $CMD "\$@"
+  else
+    command $CMD "\$@"
+  fi
+}
+$MARK_END
+EOF
+)
+
+for RC in "$HOME/.zshrc" "$HOME/.bashrc"; do
+  [ -f "$RC" ] || continue
+  if grep -q "^$MARK_BEGIN\$" "$RC" 2>/dev/null; then
+    echo "already registered in $RC"
+    continue
+  fi
+  printf "\n%s\n" "$BLOCK" >> "$RC"
+  echo "registered $CMD wrap in $RC"
+done

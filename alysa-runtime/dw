@@ -1,0 +1,32 @@
+#!/bin/bash
+# dw — Alysa-Wrap: run any interactive CLI (grok, codex, qwen, ...) while
+# recording the session. If "Alysa" is mentioned anywhere in the session,
+# the cleaned transcript gets logged to Alysa's shared conversation store
+# on exit. If she isn't mentioned, the recording is thrown away — nothing
+# unrelated to her is stored.
+#
+# Usage: dw <cmd> [args...]
+# Register a new CLI so plain `grok`, `codex`, `qwen` etc. auto-wrap:
+#   ~/.alysa/dw-register <cmd>
+
+set -uo pipefail
+
+if [ $# -lt 1 ]; then
+  echo "usage: dw <cmd> [args...]" >&2
+  exit 2
+fi
+
+CMD="$1"; shift
+CMD_BIN="$(command -v -- "$CMD" 2>/dev/null || echo "$CMD")"
+STAMP="$(date +%Y%m%dT%H%M%S)"
+TRANSDIR="$HOME/.alysa/cli-transcripts"
+mkdir -p "$TRANSDIR"
+TRANSCRIPT="$TRANSDIR/${CMD}-${STAMP}-$$.log"
+
+script -q "$TRANSCRIPT" "$CMD_BIN" "$@"
+EXIT=$?
+
+nohup python3 "$HOME/.alysa/cli-postprocess.py" \
+  --cmd "$CMD" --transcript "$TRANSCRIPT" >/dev/null 2>&1 &
+
+exit $EXIT
