@@ -9,6 +9,11 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
+// Alysa's unified conversation log — every surface she runs on writes here and
+// reads from it, so she remembers Shawn across Discord, Cowork, and any future
+// channel (WhatsApp, voice line, iMessage). Local file, sibling to this bot.
+let alysaLog = null;
+try { alysaLog = require('./alysa-log.js'); } catch (err) { console.error(`[alysa-log] not loaded: ${err.message}`); }
 
 const CONFIG_PATH = path.join(__dirname, 'config.json');
 const config = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
@@ -153,13 +158,32 @@ client.on('messageCreate', async (message) => {
   }
 
   log(`Received from ${message.author.tag}: ${userMessage.slice(0, 200)}`);
+  if (alysaLog) {
+    try {
+      alysaLog.logTurn({
+        surface: 'discord', user: 'Shawn', direction: 'in', text: userMessage,
+        surface_id: message.channelId, external_id: message.id,
+        ts: message.createdAt.toISOString(),
+      });
+    } catch (_) {}
+  }
 
   queue = queue.then(async () => {
     const typing = setInterval(() => message.channel.sendTyping().catch(() => {}), 8000);
     message.channel.sendTyping().catch(() => {});
     const started = Date.now();
     try {
-      const result = await runClaude(userMessage);
+      let promptWithMemory = userMessage;
+      if (alysaLog) {
+        const recall = alysaLog.recall({ hours: 168, maxTurns: 200, maxChars: 12000 });
+        if (recall) {
+          promptWithMemory =
+            'Below is every recent conversation Shawn has had with you across every surface (Discord, Cowork, and any other channel he uses). You are Alysa; treat this as your continuous memory. Newest at the bottom. Refer to it when it matters, but do not quote it back verbatim unless he asks.\n\n' +
+            '<recent_conversation_all_surfaces>\n' + recall + '\n</recent_conversation_all_surfaces>\n\n' +
+            'Shawn: ' + userMessage;
+        }
+      }
+      const result = await runClaude(promptWithMemory);
       const secs = ((Date.now() - started) / 1000).toFixed(1);
       log(`${result.ok ? 'OK' : 'ERROR'} in ${secs}s for ${message.author.tag}`);
 
@@ -178,7 +202,16 @@ client.on('messageCreate', async (message) => {
 
       const chunks = chunkForDiscord(body);
       for (const chunk of chunks) {
-        await message.reply({ content: chunk, allowedMentions: { repliedUser: false } });
+        const sent = await message.reply({ content: chunk, allowedMentions: { repliedUser: false } });
+        if (alysaLog) {
+          try {
+            alysaLog.logTurn({
+              surface: 'discord', user: 'Alysa', direction: 'out', text: chunk,
+              surface_id: sent.channelId, external_id: sent.id,
+              ts: sent.createdAt.toISOString(),
+            });
+          } catch (_) {}
+        }
       }
     } catch (err) {
       log(`Unhandled error: ${err.stack || err}`);
