@@ -2,6 +2,12 @@
 
 *A Hormozi-framework working doc — run in dependency order, not in parallel.*
 
+> **Read the last section first.** Run against the actual six entities, the
+> default finding below does **not** hold — this portfolio is a vertically
+> integrated delivery chain, not one business wearing six hats. The framework
+> stands; the verdict changes. See "Run against the actual six" at the end, and
+> `reevo-requirements-review.md` for the source.
+
 ---
 
 ## The premise, stated honestly
@@ -296,49 +302,113 @@ the leverage in this document is being collected.
 
 ---
 
-# Fill-in: run against the actual six
+# Run against the actual six
 
-*To be completed once the six entities are named.*
+*Entities identified from the Reevo CRM requirements document. See
+`reevo-requirements-review.md` for the full read.*
 
-### A. Consolidation test
+## The premise does not hold here — and that is the finding
 
-| Entity | What it sells | Price | Own avatar? | Own channel? | Standalone P&L? | Own operator? | Score | Verdict |
-|--------|--------------|-------|-------------|--------------|-----------------|---------------|-------|---------|
-| 1 | | | | | | | /4 | |
-| 2 | | | | | | | /4 | |
-| 3 | | | | | | | /4 | |
-| 4 | | | | | | | /4 | |
-| 5 | | | | | | | /4 | |
-| 6 | | | | | | | /4 | |
+The framework above assumes six offers ascending against one buyer. These six
+are something else: **one project, six entities, each capturing a different
+margin pool on the same transaction.** A vertically integrated delivery chain,
+not a portfolio of distractions.
 
-### B. Front-end assignment
+Consolidation is therefore the wrong prescription. What carries over is the
+front-end/back-end logic, the attach-rate metric, and the comp problem — which
+in this structure is the real risk.
 
-- **Front-end (absorbs CAC):**
-- **Back-end (zero-CAC monetization):**
-- **Parked, with wake-up condition:**
+## A. Consolidation test
 
-### C. Ascension sequence
+| Entity | Owns | Own avatar? | Own channel? | Standalone P&L? | Own operator? | Verdict |
+|---|---|---|---|---|---|---|
+| **Cultivation Warehouse** | Design, specification, energy modeling | Shared | **Yes** — the front door | Yes | Yes | **Front-end.** Acquires the project. |
+| **Sustainable Pathway** | Equipment distribution and resale | Shared | No — fed by CW | Post-merger | Yes | **Back-end.** Separate for margin + accounting, not for acquisition. |
+| **Illuminar** | LED horticultural lighting manufacture | **Potentially own** | Depends on outside channel | Yes | Yes | **Real company** *if* it sells outside the family. Test this. |
+| **BENCH** | Benching, racking, mobile systems | **Potentially own** | Depends on outside channel | Yes | Yes | Same test as Illuminar. |
+| **What Rebates** | Utility rebate coordination | Partially own | Possibly — utility relationships | Yes | Yes | **Real company**, sellable to facilities that buy no equipment. |
+| **Future entities** | RO, controls, HVAC, … | — | — | — | — | Placeholder, not a company. Keep configurable. |
 
-| Rung | Offer | Price | Entry trigger (outcome event) | Target attach rate |
-|------|-------|-------|-------------------------------|--------------------|
-| 1 | | | Day 0 — first purchase | 100% |
-| 2 | | | | |
-| 3 | | | | |
-| 4 | | | | |
-| 5 | | | | |
-| 6 | | | | |
+**The open question for Illuminar and BENCH:** what share of their revenue comes
+from outside the group? If it's meaningful, they're genuine manufacturers with
+their own distribution and the group is a customer among several. If it's near
+zero, they're captive product lines and the entity exists for margin capture and
+accounting separation — which is legitimate, but a different thing, and it
+changes how you'd value or sell them.
 
-### D. Portfolio math
+## B. Front-end assignment
+
+- **Front-end (absorbs CAC):** Cultivation Warehouse. The consulting and design
+  agreement is the first purchase on a project and seeds every downstream
+  category. Its rebateable per-category deposit is client-financed acquisition
+  in the textbook sense — the customer funds the acquisition and the credit is
+  recovered against the equipment sale.
+- **Back-end (near-zero CAC):** Sustainable Pathway, Illuminar, BENCH, What
+  Rebates. Every category they sell on a CW-originated project inherits an
+  acquisition already paid for.
+- **Parked:** nothing. This is not a focus problem.
+
+**The corollary nobody will like:** CW's standalone margin will look worse than
+the entities it feeds, because it is doing the acquisition work. That is correct
+and should be protected, not "fixed."
+
+## C. Sequence
+
+Not a value ladder — the categories are concurrent scope on one project, gated
+by design dependency rather than by ascending commitment.
+
+| Position | What | Trigger |
+|---|---|---|
+| Entry | Consulting / design agreement (CW) | Feasibility review, ROM budget |
+| Gate 1 | Facility design | Establishes rooms, sizes, workflow |
+| Gate 2 | Benching / racking (BENCH) | Canopy layout, aisle spacing |
+| Gate 3 | Lighting (Illuminar) | Fixture positions, mounting, heat load |
+| Open field | ~45 remaining categories | Any order after lighting settles |
+| Trailing | Rebate coordination (What Rebates) | Follows equipment selection |
+| Recurring | Aftercare, change orders, on-site visits | Ongoing; change orders cascade from upstream revisions |
+
+Only the first three gates are genuine technical dependency. Everything after is
+practice, and the requirements document is right to ask for soft warnings rather
+than hard blocks.
+
+## D. Portfolio math
+
+The numbers to instrument, in order of what they'd change:
 
 ```
-Blended CAC                    $
-30-day gross profit / customer $        → payback ratio:
-Portfolio LTGP / customer      $        → LTGP:CAC ratio:
-Current attach rate (2+ offers)  %
+Attach rate by category         §9 of the requirements doc asks for this already
+Portfolio LTGP per project      across all six entities, net of delivery cost
+CAC per project                 charged to CW, inherited zero-cost downstream
+Change-order capture rate       §4.3 — currently depends on someone remembering
+Deposit forfeiture rate         180-day clock; forfeit is a failure, not revenue
 ```
 
-### E. Brand architecture decision
+Change-order capture is the one to watch. The requirements document names it as
+revenue routinely left on the table, and unlike most of the wish list it is
+mechanical: an upstream revision either flags the downstream categories or it
+doesn't.
 
-- Master brand:
-- Offers named underneath:
-- Separate brands retained, and which of the four exceptions justifies each:
+## E. Brand architecture
+
+Genuine exception territory — the four cases that justify separate brands mostly
+apply here:
+
+- **Illuminar / BENCH** — manufacturers selling through channels beyond the
+  group. Separate brands are correct; a captive sub-brand would cap them.
+- **What Rebates** — sells to facilities that buy no equipment, and its
+  independence is arguably part of the pitch. Separate.
+- **Cultivation Warehouse / Sustainable Pathway** — same buyer, same project,
+  split for distribution margin and accounting. The client experiences these as
+  one relationship, and should. This is the pairing where a single client-facing
+  brand over two legal entities is worth considering.
+
+## F. The decision no system resolves
+
+When a client CW brought in buys lighting through Sustainable Pathway using
+Illuminar product, **whose customer is it and whose compensation does it hit?**
+
+Pay each entity's operators on their own booked revenue and they will optimize
+against each other on a shared transaction — with CW, the entity doing the
+acquisition, structurally under-rewarded relative to what it generates.
+
+Decide the rule before the CRM encodes a default. Then make the CRM report it.
